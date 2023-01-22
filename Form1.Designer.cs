@@ -239,7 +239,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(522, 291);
+            this.ClientSize = new System.Drawing.Size(958, 550);
             this.Controls.Add(this.tBoxDataOut);
             this.Controls.Add(this.btnSendData);
             this.Controls.Add(this.groupBox2);
