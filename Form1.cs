@@ -16,6 +16,7 @@ namespace ComPort
         // Create global variable
         string dataOut;
         string sendWith;
+        string dataIn;
         public Form1()
         {
             InitializeComponent();
@@ -37,6 +38,9 @@ namespace ComPort
             chBoxWriteLine.Checked = false;
             chBoxWrite.Checked = true;
             sendWith = "Write";
+
+            chBoxAlwaysUpdate.Checked = false;
+            chBoxAddToOLdData.Checked = true;
         }
 
         private void btnOpen_Click(object sender, EventArgs e)
@@ -176,6 +180,70 @@ namespace ComPort
                     }
                 }
             }
+        }
+
+        private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            dataIn = serialPort1.ReadExisting();
+            this.Invoke(new EventHandler(ShowData));    // This Methode Show The data Serial into TextBox.
+                                                        // You Can not Show The Data to The TextBox Directly Without Using This Methode
+        }
+
+        private void ShowData(object sender, EventArgs e)
+        {
+            int dataInLenght = dataIn.Length;
+            lblDataInLeght.Text = string.Format("{0:00}", dataInLenght);
+            // This is for Determine the TextBox Always Show The Update Data or Add to Old Data
+            if (chBoxAlwaysUpdate.Checked)
+            {
+                tBoxDataIn.Text = dataIn;
+            }
+            else if (chBoxAddToOLdData.Checked)
+            {
+            }
+            tBoxDataIn.Text += dataIn;
+        }
+
+        private void chBoxAlwaysUpdate_CheckedChanged(object sender, EventArgs e)
+        {
+            if(chBoxAlwaysUpdate.Checked)
+            {
+                //chBoxAlwaysUpdate.Checked = true;      // This Is For toggle Condition
+                chBoxAddToOLdData.Checked = false;
+            }
+            //else { chBoxAddToOLdData.Checked = true; }
+        }
+
+        private void chBoxAddToOLdData_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chBoxAddToOLdData.Checked)
+            {
+                //chBoxAddToOLdData.Checked = true;
+                chBoxAlwaysUpdate.Checked = false;      // This Is For toggle Condition
+            }
+            //else { chBoxAlwaysUpdate.Checked = true; }
+        }
+
+        private void btnClearDataIN_Click(object sender, EventArgs e)
+        {
+            if(tBoxDataIn.Text != "")
+            {
+                tBoxDataIn.Text = "";
+            }
+        }
+
+        private void btnUpdatePorts_Click(object sender, EventArgs e)
+        {
+            string[] portList = SerialPort.GetPortNames();
+            cBoxCOMPORT.Text = "";
+            cBoxCOMPORT.Items.Clear();
+
+            if (portList.Length != 0) 
+            { 
+                cBoxCOMPORT.Items.AddRange(portList);
+                cBoxCOMPORT.SelectedIndex= 0;
+            }
+
         }
     }
 }
